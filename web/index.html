@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>新闻播音训练</title>
+<meta name="theme-color" content="#b21f24">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="播音训练">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo">播</span>
+    <div>
+      <h1>新闻播音训练</h1>
+      <p id="meta">加载中…</p>
+    </div>
+  </div>
+  <button id="refreshBtn" class="icon-btn" title="刷新">⟳</button>
+</header>
+
+<div class="toolbar">
+  <input id="search" class="search" type="search" placeholder="🔍 搜索标题 / 正文…" autocomplete="off">
+  <select id="sourceSel" class="sel" title="来源"></select>
+  <select id="dateSel" class="sel" title="历史日期"></select>
+</div>
+
+<nav id="filters" class="filters"></nav>
+
+<main id="list" class="list"></main>
+
+<!-- 阅读 / 训练视图 -->
+<section id="reader" class="reader hidden">
+  <div class="reader-bar">
+    <button id="backBtn" class="icon-btn">‹ 返回</button>
+    <div class="reader-tools">
+      <button id="favBtn" class="chip" title="收藏">☆</button>
+      <button id="zoomOut" class="chip">A-</button>
+      <button id="zoomIn" class="chip">A+</button>
+      <button id="pinyinBtn" class="chip">注音</button>
+    </div>
+  </div>
+
+  <div class="reader-scroll">
+    <div class="tagrow"><span id="rSource" class="tag"></span><span id="rCat" class="tag cat"></span></div>
+    <h2 id="rTitle"></h2>
+    <p id="rStat" class="stat"></p>
+
+    <!-- 计时朗读 -->
+    <div class="timer-card">
+      <div class="timer-display">
+        <div class="t-time" id="tTime">00:00</div>
+        <div class="t-sub">
+          <span>目标 <b id="tTarget">--</b></span>
+          <span>标准 <b>240–300 字/分</b></span>
+        </div>
+      </div>
+      <div id="tResult" class="t-result hidden"></div>
+      <div class="timer-btns">
+        <button id="tStart" class="btn primary">开始朗读</button>
+        <button id="tDone" class="btn">读完计速</button>
+        <button id="tReset" class="btn">重置</button>
+      </div>
+    </div>
+
+    <!-- 录音语速对比 -->
+    <div class="rec-card">
+      <div class="rec-head">🎙 录音对比<span id="recHint" class="rec-hint"></span></div>
+      <div class="rec-btns">
+        <button id="recBtn" class="btn">开始录音</button>
+        <audio id="recAudio" class="rec-audio hidden" controls></audio>
+      </div>
+    </div>
+
+    <article id="rBody" class="body"></article>
+
+    <h3 class="sec">难点字词 · 正音</h3>
+    <div id="rHard" class="hard"></div>
+
+    <h3 class="sec">即兴评述 · 话题角度</h3>
+    <ol id="rTopics" class="topics"></ol>
+
+    <div id="aiWrap" class="hidden">
+      <h3 class="sec">即兴评述 · AI 范例</h3>
+      <div id="rAi" class="ai"></div>
+    </div>
+
+    <a id="rLink" class="src-link" target="_blank" rel="noopener">查看原文 ↗</a>
+  </div>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.heping.newsbroadcast</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/taraharris/Dropbox/Mac/Documents/Claude/Projects/Claduepot Studio folder/新闻播音训练/run_daily.sh</string>
+  </array>
+
+  <!-- 每天 09:00 运行 -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key><integer>9</integer>
+    <key>Minute</key><integer>0</integer>
+  </dict>
+
+  <!-- 若到点时电脑在睡眠/关机,开机后补跑一次 -->
+  <key>RunAtLoad</key>
+  <false/>
+
+  <key>StandardOutPath</key>
+  <string>/Users/taraharris/Dropbox/Mac/Documents/Claude/Projects/Claduepot Studio folder/新闻播音训练/logs/launchd.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/taraharris/Dropbox/Mac/Documents/Claude/Projects/Claduepot Studio folder/新闻播音训练/logs/launchd.err.log</string>
+</dict>
+</plist>
