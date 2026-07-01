@@ -36,10 +36,30 @@ HEADERS = {
     "Accept-Language": "zh-CN,zh;q=0.9",
 }
 
-PER_SOURCE = 6          # 每个来源抓取条数
+PER_SOURCE = 5          # 每个来源抓取条数(只算「有导语」的合格文章)
 REQ_TIMEOUT = 15
 READ_CPM = 260          # 播音平均语速:字/分钟(用于预估朗读时长)
 KEEP_DAYS = 30          # 历史存档保留天数
+MIN_CHARS = 300         # 正文最少字数(短讯/图说不作训练材料)
+
+# 「有导语」判定:正经消息类新闻,开头带电头/记者/时间地点等导语标志。
+# 用来过滤掉评论、短讯、图片特写、新媒体产品等没有新闻导语的稿件。
+LEAD_MARKERS = re.compile(
+    r"新华社[^。,，、]{0,12}电"           # 新华社北京6月25日电
+    r"|本报[^。,，、]{0,12}(电|讯)"        # 本报北京电 / 本报讯
+    r"|中新社[^。,，、]{0,12}电"
+    r"|人民网[^。,，、]{0,12}电"
+    r"|[（(]记者[^）)]{0,24}[）)]"        # (记者XXX)
+    r"|记者从[^。]{1,24}(获悉|了解到|获知)"
+    r"|据[^。]{1,18}(报道|消息|获悉|通报)"
+    r"|\d{1,2}月\d{1,2}日[^。]{0,14}(电|讯|报道|获悉|召开|举行|发布)"
+)
+
+
+def has_lead(paragraphs):
+    """看正文开头(前两段/前 160 字)是否具备新闻导语标志。"""
+    head = "".join(paragraphs[:2])[:160]
+    return bool(LEAD_MARKERS.search(head))
 
 # ----------------------------------------------------------------------------
 # 播音主持「易错词」语境读音表(整词命中,直接给规范读音)
@@ -308,6 +328,9 @@ def build_item(source, title, url):
         return None
     text = "".join(paragraphs)
     char_count = len(re.sub(r"[\s\W]", "", text))
+    # 只保留「有导语」的合格消息:字数达标 + 开头具备导语标志
+    if char_count < MIN_CHARS or not has_lead(paragraphs):
+        return None
     hard, ruby = annotate(paragraphs)
     return {
         "source": source,
@@ -339,7 +362,7 @@ def main():
                 break
             try:
                 it = build_item(source, title, url)
-                if it and it["char_count"] >= 80:
+                if it:
                     idx += 1
                     it["id"] = idx
                     items.append(it)
